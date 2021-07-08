@@ -72,7 +72,7 @@ Partial Class Barang
         Me.kodeBarang.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.kodeBarang.Location = New System.Drawing.Point(123, 12)
-        Me.kodeBarang.MaxLength = 5
+        Me.kodeBarang.MaxLength = 255
         Me.kodeBarang.Name = "kodeBarang"
         Me.kodeBarang.Size = New System.Drawing.Size(329, 26)
         Me.kodeBarang.TabIndex = 1

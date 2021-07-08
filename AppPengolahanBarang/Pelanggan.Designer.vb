@@ -151,7 +151,7 @@ Partial Class Pelanggan
         Me.IdPelanggan.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.IdPelanggan.Location = New System.Drawing.Point(138, 6)
-        Me.IdPelanggan.MaxLength = 5
+        Me.IdPelanggan.MaxLength = 255
         Me.IdPelanggan.Name = "IdPelanggan"
         Me.IdPelanggan.Size = New System.Drawing.Size(266, 25)
         Me.IdPelanggan.TabIndex = 0

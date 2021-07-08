@@ -22,6 +22,7 @@ Partial Class Menu
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Menu))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem
         Me.DataBarangToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
@@ -43,6 +44,7 @@ Partial Class Menu
         Me.LaporanReturBarangToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -61,18 +63,21 @@ Partial Class Menu
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DataBarangToolStripMenuItem, Me.DataPelangganToolStripMenuItem, Me.DataSuplierToolStripMenuItem, Me.ToolStripSeparator1, Me.KartuStokToolStripMenuItem})
+        Me.ToolStripMenuItem1.Image = CType(resources.GetObject("ToolStripMenuItem1.Image"), System.Drawing.Image)
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(37, 20)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(53, 20)
         Me.ToolStripMenuItem1.Text = "File"
         '
         'DataBarangToolStripMenuItem
         '
+        Me.DataBarangToolStripMenuItem.Image = CType(resources.GetObject("DataBarangToolStripMenuItem.Image"), System.Drawing.Image)
         Me.DataBarangToolStripMenuItem.Name = "DataBarangToolStripMenuItem"
         Me.DataBarangToolStripMenuItem.Size = New System.Drawing.Size(157, 22)
         Me.DataBarangToolStripMenuItem.Text = "Data Barang"
         '
         'DataPelangganToolStripMenuItem
         '
+        Me.DataPelangganToolStripMenuItem.Image = CType(resources.GetObject("DataPelangganToolStripMenuItem.Image"), System.Drawing.Image)
         Me.DataPelangganToolStripMenuItem.Name = "DataPelangganToolStripMenuItem"
         Me.DataPelangganToolStripMenuItem.Size = New System.Drawing.Size(157, 22)
         Me.DataPelangganToolStripMenuItem.Text = "Data Pelanggan"
@@ -167,7 +172,7 @@ Partial Class Menu
         '
         'StatusStrip1
         '
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel2})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 421)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode
@@ -178,8 +183,18 @@ Partial Class Menu
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(200, 17)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(543, 17)
+        Me.ToolStripStatusLabel1.Spring = True
         Me.ToolStripStatusLabel1.Text = "20120087 : Dharma Bakti Situmorang"
+        Me.ToolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.Image = CType(resources.GetObject("ToolStripStatusLabel2.Image"), System.Drawing.Image)
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(116, 17)
+        Me.ToolStripStatusLabel2.Text = "2021 - Made With"
+        Me.ToolStripStatusLabel2.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
         '
         'Menu
         '
@@ -222,4 +237,5 @@ Partial Class Menu
     Friend WithEvents LaporanReturBarangToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
     Friend WithEvents ToolStripStatusLabel1 As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel2 As System.Windows.Forms.ToolStripStatusLabel
 End Class

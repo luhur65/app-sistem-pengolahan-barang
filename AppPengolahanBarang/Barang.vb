@@ -10,8 +10,8 @@ Public Class Barang
             .Add("Kode Barang", 150, HorizontalAlignment.Center)
             .Add("Nama Barang", 250, HorizontalAlignment.Left)
             .Add("Satuan", 100, HorizontalAlignment.Center)
-            .Add("Harga (Rp)", 113, HorizontalAlignment.Left)
-            .Add("Stok", 100, HorizontalAlignment.Left)
+            .Add("Harga (Rp)", 113, HorizontalAlignment.Right)
+            .Add("Stok", 100, HorizontalAlignment.Right)
             '.Add("Diskon", 120, HorizontalAlignment.Left)
             '.Add("Bayar", 120, HorizontalAlignment.Left)
         End With
@@ -127,36 +127,45 @@ Public Class Barang
             kodeBarang.Text = GenerateNewKodeBarang()
         End If
 
-        cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode='" & kodeBarang.Text & "'", conn)
-        rd = cmd.ExecuteReader()
+        If Len(Trim(kodeBarang.Text)) = 5 Then
+            cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode='" & kodeBarang.Text & "'", conn)
+            rd = cmd.ExecuteReader()
 
-        ' pengecekan data kode barang
-        If rd.HasRows() Then
-            rd.Read()
-            ' kode barang ada
-            Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-            AturKondisiForm(False, True)
-            AturKondisiTombolAksi(tombolBehaviour)
-
-            namaBarang.Text = rd.Item("nama")
-            hargaBarang.Text = rd.Item("harga")
-            satuanBarang.Text = rd.Item("satuan")
-            stokBarang.Text = rd.Item("stok")
-        Else
-            rd.Close()
-            ' kode barang tidak ada
-            Dim tombolBehaviour1() As Boolean = {True, False, False, True, False}
-            If btnTambah.Text.ToLower = "simpan" Then
-                Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), satuanBarang.Text}
-                ValidasiData(Data, "tambah")
-                btnCancel_Click(sender, e)
-                TampilkanSemuaBarang()
-            Else
+            ' pengecekan data kode barang
+            If rd.HasRows() Then
+                rd.Read()
+                ' kode barang ada
+                Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
                 AturKondisiForm(False, True)
-                AturKondisiTombolAksi(tombolBehaviour1)
-                btnTambah.Text = "Simpan"
+                AturKondisiTombolAksi(tombolBehaviour)
+
+                namaBarang.Text = rd.Item("nama")
+                hargaBarang.Text = rd.Item("harga")
+                satuanBarang.Text = rd.Item("satuan")
+                stokBarang.Text = rd.Item("stok")
+            Else
+                rd.Close()
+                ' kode barang tidak ada
+                Dim tombolBehaviour1() As Boolean = {True, False, False, True, False}
+                If btnTambah.Text.ToLower = "simpan" Then
+                    Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), satuanBarang.Text}
+                    ValidasiData(Data, "tambah")
+                    btnCancel_Click(sender, e)
+                    TampilkanSemuaBarang()
+                Else
+                    AturKondisiForm(False, True)
+                    AturKondisiTombolAksi(tombolBehaviour1)
+                    btnTambah.Text = "Simpan"
+                End If
             End If
+
+        ElseIf Len(Trim(kodeBarang.Text)) > 5 Then
+            MsgBox("Kode barang tidak boleh lebih dari 5")
+        ElseIf Len(Trim(kodeBarang.Text)) < 5 Then
+            MsgBox("Kode barang tidak boleh kurang dari 5")
         End If
+
+        
     End Sub
 
     Private Sub btnEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEdit.Click
@@ -180,30 +189,32 @@ Public Class Barang
         Koneksi.Koneksi()
 
         If Asc(e.KeyChar) = 13 Then
-            If Len(kodeBarang.Text) = 5 Then
+            If Len(Trim(kodeBarang.Text)) = 5 Then
                 btnTambah_Click(sender, e)
+            ElseIf Len(Trim(kodeBarang.Text)) < 5 Then
+                cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode LIKE '%" & kodeBarang.Text & "%'", conn)
+                rd = cmd.ExecuteReader
+
+                If rd.HasRows Then
+                    rd.Read()
+                    ' kode barang ada
+                    Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
+                    AturKondisiForm(False, True)
+                    AturKondisiTombolAksi(tombolBehaviour)
+
+                    kodeBarang.Text = rd.Item("kode")
+                    namaBarang.Text = rd.Item("nama")
+                    hargaBarang.Text = rd.Item("harga")
+                    satuanBarang.Text = rd.Item("satuan")
+                    stokBarang.Text = rd.Item("stok")
+                    rd.Close()
+                Else
+                    MsgBox("Data barang tidak ditemukan")
+                End If
+            ElseIf Len(Trim(kodeBarang.Text)) > 5 Then
+                MsgBox("Kode barang lebih dari 5")
             Else
-                MsgBox("Digit kode barang kurang!! (min:5)")
-            End If
-        End If
-
-        If Asc(e.KeyChar) = 32 Then
-            cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode LIKE '%" & kodeBarang.Text & "%'", conn)
-            rd = cmd.ExecuteReader
-
-            If rd.HasRows Then
-                rd.Read()
-                ' kode barang ada
-                Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-                AturKondisiForm(False, True)
-                AturKondisiTombolAksi(tombolBehaviour)
-
-                kodeBarang.Text = rd.Item("kode")
-                namaBarang.Text = rd.Item("nama")
-                hargaBarang.Text = rd.Item("harga")
-                satuanBarang.Text = rd.Item("satuan")
-                stokBarang.Text = rd.Item("stok")
-                rd.Close()
+                MsgBox("Kode barang kosong")
             End If
         End If
 

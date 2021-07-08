@@ -100,35 +100,45 @@ Public Class Pelanggan
             IdPelanggan.Text = GenerateNewIDPelanggan(LV.Items.Count)
         End If
 
-        perintah = "SELECT * FROM `pelanggan` WHERE idUser='" & IdPelanggan.Text & "'"
-        cmd = New MySqlCommand(perintah, conn)
-        rd = cmd.ExecuteReader
 
-        If rd.HasRows() Then
-            rd.Read()
-            ' kode barang ada
-            Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-            AturKondisiForm(False, True)
-            AturKondisiTombolAksi(tombolBehaviour)
+        If Len(Trim(IdPelanggan.Text)) = 5 Then
+            perintah = "SELECT * FROM `pelanggan` WHERE idUser='" & IdPelanggan.Text & "'"
+            cmd = New MySqlCommand(perintah, conn)
+            rd = cmd.ExecuteReader
 
-            namaPelanggan.Text = rd.Item("namaUser")
-            alamatPelanggan.Text = rd.Item("alamat")
-            hpPelanggan.Text = rd.Item("noHP")
-            emailPelanggan.Text = rd.Item("email")
-        Else
-            rd.Close()
-            If btnTambah.Text.ToLower = "simpan" Then
-                Dim Data() As String = {IdPelanggan.Text, namaPelanggan.Text, alamatPelanggan.Text, emailPelanggan.Text, hpPelanggan.Text}
-                ValidasiPelanggan(Data, "tambah")
-                btnCancel_Click(sender, e)
-                TampilkanSemuaPelanggan()
-            Else
-                Dim tombolBehaviour() As Boolean = {True, False, False, True, False}
-                AturKondisiTombolAksi(tombolBehaviour)
+            If rd.HasRows() Then
+                rd.Read()
+                ' kode barang ada
+                Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
                 AturKondisiForm(False, True)
-                btnTambah.Text = "Simpan"
+                AturKondisiTombolAksi(tombolBehaviour)
+
+                namaPelanggan.Text = rd.Item("namaUser")
+                alamatPelanggan.Text = rd.Item("alamat")
+                hpPelanggan.Text = rd.Item("noHP")
+                emailPelanggan.Text = rd.Item("email")
+            Else
+                rd.Close()
+                If btnTambah.Text.ToLower = "simpan" Then
+                    Dim Data() As String = {IdPelanggan.Text, namaPelanggan.Text, alamatPelanggan.Text, emailPelanggan.Text, hpPelanggan.Text}
+                    ValidasiPelanggan(Data, "tambah")
+                    btnCancel_Click(sender, e)
+                    TampilkanSemuaPelanggan()
+                Else
+                    Dim tombolBehaviour() As Boolean = {True, False, False, True, False}
+                    AturKondisiTombolAksi(tombolBehaviour)
+                    AturKondisiForm(False, True)
+                    btnTambah.Text = "Simpan"
+                End If
+
             End If
+
+        ElseIf Len(Trim(IdPelanggan.Text)) > 5 Then
+            MsgBox("Id pelanggan tidak boleh lebih dari 5")
+        ElseIf Len(Trim(IdPelanggan.Text)) < 5 Then
+            MsgBox("Id pelanggan tidak boleh kurang dari 5")
         End If
+
 
     End Sub
 
@@ -161,33 +171,38 @@ Public Class Pelanggan
 
         ' tombol enter ditekan
         If Asc(e.KeyChar) = 13 Then
-            If Len(IdPelanggan.Text) = 5 Then
-                btnTambah_Click(sender, e)
 
+            If IdPelanggan.Text <> "" Then
+                If Len(Trim(IdPelanggan.Text)) = 5 Then
+                    btnTambah_Click(sender, e)
+
+                ElseIf Len(Trim(IdPelanggan.Text)) > 5 Then
+                    MsgBox("Digit kode barang lebih!! (min:5)")
+
+                ElseIf Len(Trim(IdPelanggan.Text)) < 5 Then
+                    cmd = New MySqlCommand("SELECT * FROM `pelanggan` WHERE idUser LIKE '%" & IdPelanggan.Text & "%'", conn)
+                    rd = cmd.ExecuteReader
+
+                    If rd.HasRows Then
+                        rd.Read()
+                        ' kode barang ada
+                        Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
+                        AturKondisiForm(False, True)
+                        AturKondisiTombolAksi(tombolBehaviour)
+
+                        IdPelanggan.Text = rd.Item("idUser")
+                        namaPelanggan.Text = rd.Item("namaUser")
+                        alamatPelanggan.Text = rd.Item("alamat")
+                        emailPelanggan.Text = rd.Item("email")
+                        hpPelanggan.Text = rd.Item("noHP")
+                        rd.Close()
+                    Else
+                        MsgBox("Data Pelanggan tidak ditemukan")
+                    End If
+
+                End If
             Else
-                MsgBox("Digit kode barang kurang!! (min:5)")
-
-            End If
-        End If
-
-        ' tombol spasi ditekan
-        If Asc(e.KeyChar) = 32 Then
-            cmd = New MySqlCommand("SELECT * FROM `pelanggan` WHERE idUser LIKE '%" & IdPelanggan.Text & "%'", conn)
-            rd = cmd.ExecuteReader
-
-            If rd.HasRows Then
-                rd.Read()
-                ' kode barang ada
-                Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-                AturKondisiForm(False, True)
-                AturKondisiTombolAksi(tombolBehaviour)
-
-                IdPelanggan.Text = rd.Item("idUser")
-                namaPelanggan.Text = rd.Item("namaUser")
-                alamatPelanggan.Text = rd.Item("alamat")
-                emailPelanggan.Text = rd.Item("email")
-                hpPelanggan.Text = rd.Item("noHP")
-                rd.Close()
+                MsgBox("Id Pelanggan Kosong")
             End If
 
         End If
