@@ -128,7 +128,7 @@ Public Class Barang
         End If
 
         If Len(Trim(kodeBarang.Text)) = 5 Then
-            cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode='" & kodeBarang.Text & "'", conn)
+            cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode='" & kodeBarang.Text.Trim & "'", conn)
             rd = cmd.ExecuteReader()
 
             ' pengecekan data kode barang
@@ -148,7 +148,7 @@ Public Class Barang
                 ' kode barang tidak ada
                 Dim tombolBehaviour1() As Boolean = {True, False, False, True, False}
                 If btnTambah.Text.ToLower = "simpan" Then
-                    Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), satuanBarang.Text}
+                    Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), UCase(satuanBarang.Text)}
                     ValidasiData(Data, "tambah")
                     btnCancel_Click(sender, e)
                     TampilkanSemuaBarang()
@@ -169,7 +169,7 @@ Public Class Barang
     End Sub
 
     Private Sub btnEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEdit.Click
-        Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), satuanBarang.Text}
+        Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), UCase(satuanBarang.Text)}
         ValidasiData(Data, "ubah")
         btnCancel_Click(sender, e)
         TampilkanSemuaBarang()
