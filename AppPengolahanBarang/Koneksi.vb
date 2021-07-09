@@ -60,7 +60,7 @@ Module Koneksi
         Koneksi()
 
         If Val(data(0)) = 0 Or data(1) = "" Or Val(data(2)) = 0 Or Val(data(3)) = 0 Or data(4) = "" Then
-            MsgBox("Data ada yang kosong!!")
+            MsgBox("Harap periksa kembali data barang anda")
         Else
             ' cek params aksi
             If aksi = "tambah" Then
