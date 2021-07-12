@@ -22,7 +22,6 @@ Partial Class Barang
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Barang))
         Me.LV = New System.Windows.Forms.ListView
         Me.Label1 = New System.Windows.Forms.Label
         Me.kodeBarang = New System.Windows.Forms.TextBox
@@ -42,6 +41,7 @@ Partial Class Barang
         Me.Label6 = New System.Windows.Forms.Label
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip
         Me.TotalBarang = New System.Windows.Forms.ToolStripStatusLabel
+        Me.btnSave = New System.Windows.Forms.Button
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -156,64 +156,49 @@ Partial Class Barang
         '
         'btnTambah
         '
-        Me.btnTambah.Image = CType(resources.GetObject("btnTambah.Image"), System.Drawing.Image)
         Me.btnTambah.Location = New System.Drawing.Point(12, 132)
         Me.btnTambah.Name = "btnTambah"
-        Me.btnTambah.Size = New System.Drawing.Size(119, 32)
+        Me.btnTambah.Size = New System.Drawing.Size(105, 32)
         Me.btnTambah.TabIndex = 6
         Me.btnTambah.Text = "Tambah"
-        Me.btnTambah.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnTambah.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnTambah.UseVisualStyleBackColor = True
         '
         'btnEdit
         '
-        Me.btnEdit.Image = CType(resources.GetObject("btnEdit.Image"), System.Drawing.Image)
-        Me.btnEdit.Location = New System.Drawing.Point(137, 132)
+        Me.btnEdit.Location = New System.Drawing.Point(228, 132)
         Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Size = New System.Drawing.Size(110, 32)
+        Me.btnEdit.Size = New System.Drawing.Size(102, 32)
         Me.btnEdit.TabIndex = 7
         Me.btnEdit.Text = "Ubah"
-        Me.btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnEdit.UseVisualStyleBackColor = True
         '
         'btnHapus
         '
-        Me.btnHapus.Image = CType(resources.GetObject("btnHapus.Image"), System.Drawing.Image)
-        Me.btnHapus.Location = New System.Drawing.Point(253, 132)
+        Me.btnHapus.Location = New System.Drawing.Point(336, 132)
         Me.btnHapus.Name = "btnHapus"
-        Me.btnHapus.Size = New System.Drawing.Size(115, 32)
+        Me.btnHapus.Size = New System.Drawing.Size(116, 32)
         Me.btnHapus.TabIndex = 8
         Me.btnHapus.Text = "Hapus"
-        Me.btnHapus.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnHapus.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnHapus.UseVisualStyleBackColor = True
         '
         'btnQuit
         '
         Me.btnQuit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnQuit.Image = CType(resources.GetObject("btnQuit.Image"), System.Drawing.Image)
         Me.btnQuit.Location = New System.Drawing.Point(614, 132)
         Me.btnQuit.Name = "btnQuit"
         Me.btnQuit.Size = New System.Drawing.Size(166, 32)
         Me.btnQuit.TabIndex = 10
         Me.btnQuit.Text = "Keluar"
-        Me.btnQuit.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnQuit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnQuit.UseVisualStyleBackColor = True
         '
         'btnCancel
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCancel.Image = CType(resources.GetObject("btnCancel.Image"), System.Drawing.Image)
         Me.btnCancel.Location = New System.Drawing.Point(507, 132)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(101, 32)
         Me.btnCancel.TabIndex = 9
         Me.btnCancel.Text = "Batal"
-        Me.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnCancel.UseVisualStyleBackColor = True
         '
         'Label6
@@ -243,17 +228,28 @@ Partial Class Barang
         Me.TotalBarang.Name = "TotalBarang"
         Me.TotalBarang.Size = New System.Drawing.Size(0, 17)
         '
+        'btnSave
+        '
+        Me.btnSave.Location = New System.Drawing.Point(123, 132)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(99, 32)
+        Me.btnSave.TabIndex = 6
+        Me.btnSave.Text = "Simpan"
+        Me.btnSave.UseVisualStyleBackColor = True
+        '
         'Barang
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(792, 545)
+        Me.ControlBox = False
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnQuit)
         Me.Controls.Add(Me.btnHapus)
         Me.Controls.Add(Me.btnEdit)
+        Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.btnTambah)
         Me.Controls.Add(Me.satuanBarang)
         Me.Controls.Add(Me.hargaBarang)
@@ -297,5 +293,6 @@ Partial Class Barang
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
     Friend WithEvents TotalBarang As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents btnSave As System.Windows.Forms.Button
 
 End Class

@@ -10,4 +10,8 @@
         Pelanggan.Show()
     End Sub
 
+    Private Sub KELUARToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KELUARToolStripMenuItem.Click
+        End
+    End Sub
+
 End Class

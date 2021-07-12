@@ -2,8 +2,6 @@
 
 Public Class Pelanggan
 
-    Dim tombolBehaviour() As Boolean = {True, False, False, False, True}
-
     Sub BuatListView()
         With LV.Columns
             .Add("No.", 40, HorizontalAlignment.Center)
@@ -18,14 +16,14 @@ Public Class Pelanggan
         LV.FullRowSelect = True
     End Sub
 
-    Sub IsiListview()
+    Sub IsiListview(ByVal rd As Object)
         Dim i As Integer = 1
         While rd.Read
             Dim baris As New ListViewItem
             baris.Text = i
             With baris.SubItems
                 .Add(rd.Item("idUser"))
-                .Add(rd.Item("namauser"))
+                .Add(Microsoft.VisualBasic.StrConv(rd.Item("namauser"), VbStrConv.ProperCase))
                 .Add(rd.Item("alamat"))
                 .Add(rd.Item("email"))
                 .Add(rd.Item("noHP"))
@@ -34,6 +32,14 @@ Public Class Pelanggan
             i += 1
         End While
         rd.Close()
+    End Sub
+
+    Sub Bersih()
+        AturKondisiForm(False, False)
+        HapusIsianForm()
+        IdPelanggan.Focus()
+        AturKondisiTombolAksi(True, False, False, False, False, True)
+        TampilkanSemuaPelanggan()
     End Sub
 
     Sub HapusIsianForm()
@@ -52,15 +58,14 @@ Public Class Pelanggan
         hpPelanggan.Enabled = b
     End Sub
 
-    Sub AturKondisiTombolAksi(ByVal aksi() As Boolean)
-        btnTambah.Enabled = aksi(0)
-        btnEdit.Enabled = aksi(1)
-        btnHapus.Enabled = aksi(2)
-        btnCancel.Enabled = aksi(3)
-        btnQuit.Enabled = aksi(4)
-        btnTambah.Text = "Tambah"
-        btnEdit.Text = "Ubah"
-        btnHapus.Text = "Hapus"
+    Sub AturKondisiTombolAksi(ByVal a As Boolean, ByVal b As Boolean, ByVal c As Boolean, _
+                              ByVal d As Boolean, ByVal e As Boolean, ByVal f As Boolean)
+        btnTambah.Enabled = a
+        btnSave.Enabled = b
+        btnEdit.Enabled = c
+        btnHapus.Enabled = d
+        btnCancel.Enabled = e
+        btnQuit.Enabled = f
     End Sub
 
     Sub TampilkanSemuaPelanggan()
@@ -76,84 +81,46 @@ Public Class Pelanggan
             ' panggil function BuatListview -nya
             BuatListView()
             ' buat isi listview -nya
-            IsiListview()
+            IsiListview(rd)
         End If
 
         TotalPelanggan.Text = "Jumlah Pelanggan : " & LV.Items.Count()
     End Sub
 
-    Private Sub btnQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnQuit.Click
-        Me.Close()
-    End Sub
-
     Private Sub Pelanggan_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         TampilkanSemuaPelanggan()
-        AturKondisiForm(True, False)
-        AturKondisiTombolAksi(tombolBehaviour)
-        IdPelanggan.Focus()
+        AturKondisiForm(False, False)
+        AturKondisiTombolAksi(True, False, False, False, False, True)
     End Sub
 
     Private Sub btnTambah_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTambah.Click
-        Koneksi.Koneksi()
+        AturKondisiForm(True, False)
+        IdPelanggan.Focus()
+        AturKondisiTombolAksi(False, False, False, False, True, False)
+    End Sub
 
-        If IdPelanggan.Text = "" Then
-            IdPelanggan.Text = GenerateNewIDPelanggan(LV.Items.Count)
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        Dim Data() As String = {IdPelanggan.Text, namaPelanggan.Text, alamatPelanggan.Text, emailPelanggan.Text, hpPelanggan.Text}
+        If Data(0) = "" Or Data(1) = "" Or Data(2) = "" Or Data(3) = "" Or Data(4) = "" Then
+            MsgBox("Data masih ada yang kosong, Harap isi ulang kembali!!")
+        Else
+            TambahPelangganBaru(Data)
+            Bersih()
         End If
-
-
-        If Len(Trim(IdPelanggan.Text)) = 5 Then
-            perintah = "SELECT * FROM `pelanggan` WHERE idUser='" & IdPelanggan.Text & "'"
-            cmd = New MySqlCommand(perintah, conn)
-            rd = cmd.ExecuteReader
-
-            If rd.HasRows() Then
-                rd.Read()
-                ' kode barang ada
-                Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-                AturKondisiForm(False, True)
-                AturKondisiTombolAksi(tombolBehaviour)
-
-                namaPelanggan.Text = rd.Item("namaUser")
-                alamatPelanggan.Text = rd.Item("alamat")
-                hpPelanggan.Text = rd.Item("noHP")
-                emailPelanggan.Text = rd.Item("email")
-            Else
-                rd.Close()
-                If btnTambah.Text.ToLower = "simpan" Then
-                    Dim Data() As String = {IdPelanggan.Text, namaPelanggan.Text, alamatPelanggan.Text, emailPelanggan.Text, hpPelanggan.Text}
-                    ValidasiPelanggan(Data, "tambah")
-                    btnCancel_Click(sender, e)
-                    TampilkanSemuaPelanggan()
-                Else
-                    Dim tombolBehaviour() As Boolean = {True, False, False, True, False}
-                    AturKondisiTombolAksi(tombolBehaviour)
-                    AturKondisiForm(False, True)
-                    btnTambah.Text = "Simpan"
-                End If
-
-            End If
-
-        ElseIf Len(Trim(IdPelanggan.Text)) > 5 Then
-            MsgBox("Id pelanggan tidak boleh lebih dari 5")
-        ElseIf Len(Trim(IdPelanggan.Text)) < 5 Then
-            MsgBox("Id pelanggan tidak boleh kurang dari 5")
-        End If
-
-
     End Sub
 
     Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
-        AturKondisiForm(True, False)
-        HapusIsianForm()
-        AturKondisiTombolAksi(tombolBehaviour)
-        IdPelanggan.Focus()
+        Bersih()
     End Sub
 
     Private Sub btnEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEdit.Click
         Dim Data() As String = {IdPelanggan.Text, namaPelanggan.Text, alamatPelanggan.Text, emailPelanggan.Text, hpPelanggan.Text}
-        ValidasiPelanggan(Data, "ubah")
-        btnCancel_Click(sender, e)
-        TampilkanSemuaPelanggan()
+        If Data(0) = "" Or Data(1) = "" Or Data(2) = "" Or Data(3) = "" Or Data(4) = "" Then
+            MsgBox("Data masih ada yang kosong, Harap isi ulang kembali!!")
+        Else
+            UbahPelanggan(Data)
+            Bersih()
+        End If
     End Sub
 
     Private Sub btnHapus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHapus.Click
@@ -166,6 +133,10 @@ Public Class Pelanggan
         End If
     End Sub
 
+    Private Sub btnQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnQuit.Click
+        Me.Close()
+    End Sub
+
     Private Sub IdPelanggan_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles IdPelanggan.KeyPress
         Koneksi.Koneksi()
 
@@ -173,38 +144,32 @@ Public Class Pelanggan
         If Asc(e.KeyChar) = 13 Then
 
             If IdPelanggan.Text <> "" Then
-                If Len(Trim(IdPelanggan.Text)) = 5 Then
-                    btnTambah_Click(sender, e)
+                cmd = New MySqlCommand("SELECT * FROM `pelanggan` WHERE idUser LIKE '%" & IdPelanggan.Text & "%'", conn)
+                rd = cmd.ExecuteReader
 
-                ElseIf Len(Trim(IdPelanggan.Text)) > 5 Then
-                    MsgBox("Digit kode barang lebih!! (min:5)")
+                If rd.HasRows Then
+                    rd.Read()
+                    ' kode barang ada
+                    AturKondisiForm(False, True)
+                    AturKondisiTombolAksi(False, False, True, True, True, False)
 
-                ElseIf Len(Trim(IdPelanggan.Text)) < 5 Then
-                    cmd = New MySqlCommand("SELECT * FROM `pelanggan` WHERE idUser LIKE '%" & IdPelanggan.Text & "%'", conn)
-                    rd = cmd.ExecuteReader
-
-                    If rd.HasRows Then
-                        rd.Read()
-                        ' kode barang ada
-                        Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-                        AturKondisiForm(False, True)
-                        AturKondisiTombolAksi(tombolBehaviour)
-
-                        IdPelanggan.Text = rd.Item("idUser")
-                        namaPelanggan.Text = rd.Item("namaUser")
-                        alamatPelanggan.Text = rd.Item("alamat")
-                        emailPelanggan.Text = rd.Item("email")
-                        hpPelanggan.Text = rd.Item("noHP")
-                        rd.Close()
-                    Else
-                        MsgBox("Data Pelanggan tidak ditemukan")
-                    End If
-
+                    IdPelanggan.Text = rd.Item("idUser")
+                    namaPelanggan.Text = rd.Item("namaUser")
+                    alamatPelanggan.Text = rd.Item("alamat")
+                    emailPelanggan.Text = rd.Item("email")
+                    hpPelanggan.Text = rd.Item("noHP")
+                    rd.Close()
+                Else
+                    AturKondisiForm(False, True)
+                    namaPelanggan.Focus()
+                    AturKondisiTombolAksi(False, True, False, False, True, False)
                 End If
+
             Else
                 MsgBox("Id Pelanggan Kosong")
             End If
 
         End If
     End Sub
+
 End Class
