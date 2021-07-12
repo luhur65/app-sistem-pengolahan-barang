@@ -3,10 +3,10 @@ G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\bin\Debug\AppPengol
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\bin\Debug\AppPengolahanBarang.xml
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\ResolveAssemblyReference.cache
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.Barang.resources
+G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.Menu.resources
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.Resources.resources
+G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.Pelanggan.resources
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.vbproj.GenerateResource.Cache
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.exe
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.xml
 G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.pdb
-G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.Menu.resources
-G:\Visual Basic .NET\AppPengolahanBarang\AppPengolahanBarang\obj\Debug\AppPengolahanBarang.Pelanggan.resources

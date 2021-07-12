@@ -1,7 +1,7 @@
 1. Form Menu Utama
 	- File
-		- Data Barang	---------> Muncul form data barang
-		- Data Pelanggan --------> form data pelanggan
+		- Data Barang			--------> Muncul form data barang
+		- Data Pelanggan 	--------> form data pelanggan
 		- Data Suplier
 		---------------
 		- Kartu Stok
@@ -20,5 +20,5 @@
 		- Laporan penjualan barang
 		- Laporan retur barang
 
-2. StatusBar isi dengan Npm dan Nama
-	(Tambahan ) -> ( 20120087 : Dharma Bakti Situmorang )
+2. StatusBar isi dengan ( Npm : Nama )
+	 ( 20120087 : Dharma Bakti Situmorang )

@@ -2,8 +2,6 @@
 
 Public Class Barang
 
-    Dim tombolBehaviour() As Boolean = {True, False, False, False, True}
-
     Sub BuatListView()
         With LV.Columns
             .Add("No.", 50, HorizontalAlignment.Center)
@@ -20,7 +18,7 @@ Public Class Barang
         LV.FullRowSelect = True
     End Sub
 
-    Sub IsiListview()
+    Sub IsiListview(ByVal rd As Object)
         Dim i As Integer = 1
         While rd.Read
             Dim baris As New ListViewItem
@@ -53,7 +51,7 @@ Public Class Barang
             ' panggil function BuatListview -nya
             BuatListView()
             ' buat isi listview -nya
-            IsiListview()
+            IsiListview(rd)
         Else
             LV.Columns.Add("Tidak ada Data", 500)
         End If
@@ -74,6 +72,14 @@ Public Class Barang
         rd.Close()
     End Sub
 
+    Sub Bersih()
+        HapusIsianForm()
+        AturKondisiForm(False, False)
+        AturKondisiTombolAksi(True, False, False, False, True, False)
+        kodeBarang.Focus()
+        TampilkanSemuaBarang()
+    End Sub
+
     Sub HapusIsianForm()
         kodeBarang.Clear()
         namaBarang.Clear()
@@ -90,134 +96,98 @@ Public Class Barang
         stokBarang.Enabled = b
     End Sub
 
-    Sub AturKondisiTombolAksi(ByVal aksi() As Boolean)
-        btnTambah.Enabled = aksi(0)
-        btnEdit.Enabled = aksi(1)
-        btnHapus.Enabled = aksi(2)
-        btnCancel.Enabled = aksi(3)
-        btnQuit.Enabled = aksi(4)
-        btnTambah.Text = "Tambah"
-        btnEdit.Text = "Ubah"
-        btnHapus.Text = "Hapus"
+    Sub AturKondisiTombolAksi(ByVal a As Boolean, ByVal b As Boolean, ByVal c As Boolean, ByVal d As Boolean, ByVal e As Boolean, ByVal f As Boolean)
+        btnTambah.Enabled = a
+        btnEdit.Enabled = b
+        btnHapus.Enabled = c
+        btnCancel.Enabled = d
+        btnQuit.Enabled = e
+        btnSave.Enabled = f
     End Sub
 
     Private Sub Barang_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         TampilkanSemuaBarang()
+        AturKondisiForm(False, False)
+        AturKondisiTombolAksi(True, False, False, False, True, False)
         IsiComboBox()
-        AturKondisiForm(True, False)
-        AturKondisiTombolAksi(tombolBehaviour)
-    End Sub
-
-    Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
-        HapusIsianForm()
-        AturKondisiForm(True, False)
-        AturKondisiTombolAksi(tombolBehaviour)
-        kodeBarang.Focus()
-    End Sub
-
-    Private Sub btnQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnQuit.Click
-        Me.Close()
     End Sub
 
     Private Sub btnTambah_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTambah.Click
-        Koneksi.Koneksi()
+        AturKondisiForm(True, False)
+        AturKondisiTombolAksi(False, False, False, True, False, False)
+        kodeBarang.Focus()
+    End Sub
 
-        ' jika kode barang kosong maka buatkan kode barang baru dari hasil generate
-        If kodeBarang.Text = "" Then
-            kodeBarang.Text = GenerateNewKodeBarang()
+    Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
+        Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), UCase(satuanBarang.Text)}
+        If Val(Data(0)) = 0 Or Data(1) = "" Or Val(Data(2)) = 0 Or Val(Data(3)) = 0 Or Data(4) = "" Then
+            MsgBox("Data masih ada yang kosong / salah")
+        Else
+            TambahBarang(Data)
+            Bersih()
         End If
-
-        If Len(Trim(kodeBarang.Text)) = 5 Then
-            cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode='" & kodeBarang.Text.Trim & "'", conn)
-            rd = cmd.ExecuteReader()
-
-            ' pengecekan data kode barang
-            If rd.HasRows() Then
-                rd.Read()
-                ' kode barang ada
-                Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-                AturKondisiForm(False, True)
-                AturKondisiTombolAksi(tombolBehaviour)
-
-                namaBarang.Text = rd.Item("nama")
-                hargaBarang.Text = rd.Item("harga")
-                satuanBarang.Text = rd.Item("satuan")
-                stokBarang.Text = rd.Item("stok")
-            Else
-                rd.Close()
-                ' kode barang tidak ada
-                Dim tombolBehaviour1() As Boolean = {True, False, False, True, False}
-                If btnTambah.Text.ToLower = "simpan" Then
-                    Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), UCase(satuanBarang.Text)}
-                    ValidasiData(Data, "tambah")
-                    btnCancel_Click(sender, e)
-                    TampilkanSemuaBarang()
-                Else
-                    AturKondisiForm(False, True)
-                    AturKondisiTombolAksi(tombolBehaviour1)
-                    btnTambah.Text = "Simpan"
-                End If
-            End If
-
-        ElseIf Len(Trim(kodeBarang.Text)) > 5 Then
-            MsgBox("Kode barang tidak boleh lebih dari 5")
-        ElseIf Len(Trim(kodeBarang.Text)) < 5 Then
-            MsgBox("Kode barang tidak boleh kurang dari 5")
-        End If
-
-        
     End Sub
 
     Private Sub btnEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnEdit.Click
         Dim Data() As String = {Val(kodeBarang.Text), namaBarang.Text, Val(hargaBarang.Text), Val(stokBarang.Text), UCase(satuanBarang.Text)}
-        ValidasiData(Data, "ubah")
-        btnCancel_Click(sender, e)
-        TampilkanSemuaBarang()
+        If Val(Data(0)) = 0 Or Data(1) = "" Or Val(Data(2)) = 0 Or Val(Data(3)) = 0 Or Data(4) = "" Then
+            MsgBox("Data masih ada yang kosong / salah")
+        Else
+            UbahDataBarang(Data)
+            Bersih()
+        End If
     End Sub
 
     Private Sub btnHapus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHapus.Click
         Dim feedback As Integer
         feedback = MsgBox("Yakin ingin dihapus ??", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2, "Konfirmasi")
+
+        ' Cek feedback ? 
+        ' ya -> hapus data barang
+        ' no -> hapus data barang tidak jadi
         If feedback = MsgBoxResult.Yes Then
             HapusDataBarang(kodeBarang.Text)
-            TampilkanSemuaBarang()
-            btnCancel_Click(sender, e)
+            Bersih()
         End If
     End Sub
 
     Private Sub kodeBarang_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles kodeBarang.KeyPress
         Koneksi.Koneksi()
 
+        ' tombol enter ditekan
         If Asc(e.KeyChar) = 13 Then
-            If Len(Trim(kodeBarang.Text)) = 5 Then
-                btnTambah_Click(sender, e)
-            ElseIf Len(Trim(kodeBarang.Text)) < 5 Then
-                cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode LIKE '%" & kodeBarang.Text & "%'", conn)
-                rd = cmd.ExecuteReader
+            cmd = New MySqlCommand("SELECT * FROM `barang` WHERE kode='" & kodeBarang.Text & "'", conn)
+            rd = cmd.ExecuteReader()
 
-                If rd.HasRows Then
-                    rd.Read()
-                    ' kode barang ada
-                    Dim tombolBehaviour() As Boolean = {False, True, True, True, False}
-                    AturKondisiForm(False, True)
-                    AturKondisiTombolAksi(tombolBehaviour)
+            ' pengecekan data kode barang
+            ' jika ada
+            If rd.HasRows() Then
+                rd.Read()
+                ' kode barang ada
+                AturKondisiForm(False, True)
+                AturKondisiTombolAksi(False, True, True, True, False, False)
 
-                    kodeBarang.Text = rd.Item("kode")
-                    namaBarang.Text = rd.Item("nama")
-                    hargaBarang.Text = rd.Item("harga")
-                    satuanBarang.Text = rd.Item("satuan")
-                    stokBarang.Text = rd.Item("stok")
-                    rd.Close()
-                Else
-                    MsgBox("Data barang tidak ditemukan")
-                End If
-            ElseIf Len(Trim(kodeBarang.Text)) > 5 Then
-                MsgBox("Kode barang lebih dari 5")
+                namaBarang.Text = rd.Item("nama")
+                hargaBarang.Text = rd.Item("harga")
+                satuanBarang.Text = rd.Item("satuan")
+                stokBarang.Text = rd.Item("stok")
+                rd.Close()
             Else
-                MsgBox("Kode barang kosong")
+                ' kode barang tidak ada
+                AturKondisiForm(False, True)
+                AturKondisiTombolAksi(False, False, False, True, False, True)
+
             End If
         End If
 
+    End Sub
+
+    Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
+        Bersih()
+    End Sub
+
+    Private Sub btnQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnQuit.Click
+        Me.Close()
     End Sub
 
 End Class
